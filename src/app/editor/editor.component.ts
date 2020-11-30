@@ -77,12 +77,12 @@ export class EditorComponent implements AfterViewInit {
              doc.unsubscribe();
            },
              error => {
-               console.log('Error', error.code || 'Issue loading document!');
+               alert('Error', error.code || 'Issue loading document!');
                doc.unsubscribe();
              });
        },
          error => {
-           console.log('Error', error.code || 'Error accessing Google Firebase!');
+           console.log('Error', error.code || 'Unable to access Google Firebase!');
          }),
 
      //  save real time changes to firebase
@@ -93,14 +93,23 @@ export class EditorComponent implements AfterViewInit {
          debounceTime(500)
        )
        .subscribe(() => {
+         this.latex();
          this.saveDocument();
        })
    );
  }
+
+ private latex(): void {
+   let content = this.editor.getContent(0);
+   let match = content.match(/\$.*?\$/g);
+   let newContent = match.replace(/\$/g, '');
+   this.editor.setContent(newContent);
+ }
+
  private saveDocument(): void {
     this.firestoreService.saveDocument(this.userid.getValue(), this.editor.getContent(0))
       .catch(err => {
-        console.log('Error saving document', err.code);
+        alert('Error saving document', err.code);
       })
   }
 }
