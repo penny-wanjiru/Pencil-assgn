@@ -77,12 +77,12 @@ export class EditorComponent implements AfterViewInit {
              doc.unsubscribe();
            },
              error => {
-               alert('Error', error.code || 'Issue loading document!');
+               console.log('Error', error.code);
                doc.unsubscribe();
              });
        },
          error => {
-           console.log('Error', error.code || 'Unable to access Google Firebase!');
+           console.log('Error', error.code);
          }),
 
      //  save real time changes to firebase
@@ -109,7 +109,7 @@ export class EditorComponent implements AfterViewInit {
  private saveDocument(): void {
     this.firestoreService.saveDocument(this.userid.getValue(), this.editor.getContent(0))
       .catch(err => {
-        alert('Error saving document', err.code);
+        console.log('Error saving document', err.code);
       })
   }
 }
