@@ -57,7 +57,32 @@ export class EditorComponent implements AfterViewInit {
        cleanPastedHTML: true,
        cleanReplacements: true,
        cleanTags: ['script', 'meta', 'frame', 'iframe', 'video', 'audio']
-     }
+     },
+     keyboardCommands: {
+        commands: [
+            {
+                command: 'bold',
+                key: 'B',
+                meta: true,
+                shift: false,
+                alt: false
+            },
+            {
+                command: 'italic',
+                key: 'I',
+                meta: true,
+                shift: false,
+                alt: false
+            },
+            {
+                command: 'underline',
+                key: 'U',
+                meta: true,
+                shift: false,
+                alt: false
+            }
+        ],
+    }
    });
 
    this.subscriptions.push(
@@ -102,8 +127,11 @@ export class EditorComponent implements AfterViewInit {
  private latex(): void {
    let content = this.editor.getContent(0);
    let match = content.match(/\$.*?\$/g);
-   let newContent = match.replace(/\$/g, '');
-   this.editor.setContent(newContent);
+   if (match){
+     let newContent = match[0].replace(/\$/g, '');
+     let newWord  = content.replace(match, newContent)
+     let one  =  this.editor.setContent(newWord)
+   }
  }
 
  private saveDocument(): void {
